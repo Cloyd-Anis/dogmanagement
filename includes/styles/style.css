@@ -1,0 +1,177 @@
+body {
+    background-color: #fff;
+}
+
+.wrapper {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+}
+
+#nav1 {
+    border-bottom: solid #669900;
+}
+
+#nav1 .navbar-brand {
+    margin-right: 95px;
+}
+
+#sidebar {
+    min-width: 250px;
+    max-width: 250px;
+    height: 100vh;
+    background: #263300;
+    color: #fff;
+    transition: all 0.3s;
+}
+
+#sidebar.active {
+    margin-left: -250px;
+}
+
+#sidebar ul.components {
+    padding: 20px 0;
+    border-bottom: 1px solid #669900;
+}
+
+#sidebar ul li a {
+    padding: 10px;
+    font-size: 1.1em;
+    display: block;
+    text-decoration: none;
+    color: #fff;
+}
+
+#sidebar ul li a:hover {
+    color: #669900;
+    background: #fff;
+}
+
+#sidebarCollapse {
+    margin-left: -20px;
+    background: #263300;
+    color: #fff;
+}
+
+#content {
+    width: 100%;
+    padding: 20px;
+    min-height: 100vh;
+    transition: all 0.3s;
+}
+
+.filter li {
+    display: inline;
+    list-style-type: none;
+    margin: 0px 10px;
+}
+
+.filter li a {
+    text-decoration: none;
+    color: #111;
+}
+
+.filter li a:hover {
+    color: #669900;
+}
+
+#notesRow .col {
+    color: #263300;
+    background: #263300;
+    padding: 20px;
+    margin: 10px;
+    min-height: 140px;
+    min-width: 270px;
+    max-width: 150px;
+    text-align: left;
+}
+
+@media (max-width: 768px) {
+    #sidebar {
+        margin-left: -250px;
+    }
+    #sidebar.active {
+        margin-left: 0;
+    }
+    #sidebarCollapse span {
+        display: none;
+    }
+}
+
+/**feedback.html specifics**/
+
+#commentForm {
+    margin: 0 auto;
+    min-width: 350px;
+    color: #263300;
+    padding: 10px;
+}
+
+#commentForm button {
+    float: right;
+    margin-top: 10px;
+}
+
+#commentArea {
+    min-width: 350px;
+    max-width: 400px;
+}
+
+/**manageACC.html specifics**/
+
+.mngAccWrap {
+    text-align: center;
+    margin: 50px auto;
+    max-width: 350px;
+    min-width: 300px;
+    color: #263300;
+    padding: 20px;
+}
+
+.mngAccWrap h5 {
+    text-align: center;
+}
+
+.mngAcc li {
+    list-style: none;
+    text-align: left;
+    margin: 20px 10px;
+}
+
+#addNote {
+    margin-left: 50px;
+    width: 120px;
+}
+
+    /* Hide the Popup form */
+.form-popup {
+    display: none;
+    position: fixed;
+    left: 45%;
+    top:5%;
+    transform: translate(-45%,5%);
+    z-index: 9;
+}
+    /* Styles for the form container */
+.form-container {
+    max-width: 300px;
+    padding: 20px;
+    background-color: #fff;
+}
+    /* Full-width for input fields */
+.form-container input[type=text], .form-container input[type=password] {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 22px 0;
+    border: none;
+    background: #eee;
+}
+    /* When the inputs get focus, do something */
+.form-container input[type=text]:focus, .form-container input[type=password]:focus {
+    background-color: #ddd;
+    outline: none;
+}    /* Hover effects for buttons */
+
+.fa-file {
+    float: right;
+}
