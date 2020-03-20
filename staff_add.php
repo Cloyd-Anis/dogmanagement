@@ -106,13 +106,13 @@
         </div>
         
         <div class="container mt-3">
-            <form>
+            <form action='./handlers/add_staff.php' method='POSt'>
             <h2>ADD STAFF</h2>
             <div class="row">
                 <div class="col-md-4">
                 <div class="form-group">
                     <label for="first">First Name</label>
-                    <input type="text" class="form-control" placeholder="" id="first">
+                    <input type="text" class="form-control" placeholder="First Name" name='firstname' id="first">
                 </div>
                 </div>
                 <!--  col-md-6   -->
@@ -120,14 +120,14 @@
                 <div class="col-md-4">
                     <div class="form-group">
                     <label for="middle">Middle Name</label>
-                    <input type="text" class="form-control" placeholder="" id="middle">
+                    <input type="text" class="form-control" placeholder="Middle Name" name='middlename' id="middle">
                     </div>
                 </div>
         
                 <div class="col-md-4">
                 <div class="form-group">
                     <label for="last">Last Name</label>
-                    <input type="text" class="form-control" placeholder="" id="last">
+                    <input type="text" class="form-control" placeholder="Last Name" name='lastname' id="last">
                 </div>
                 </div>
                 <!--  col-md-6   -->
@@ -140,14 +140,14 @@
         
                     <div class="form-group">
                     <label for="email">Email address</label>
-                    <input type="email" class="form-control" id="email" placeholder="E-mail">
+                    <input type="email" class="form-control" id="email" name='email' placeholder="E-mail">
                     </div>
                 </div>
 
                 <div class="col-md-4">
                     <div class="form-group">
                     <label for="address">Address</label>
-                    <input type="text" class="form-control" placeholder="Address" id="address">
+                    <input type="text" class="form-control" placeholder="Address" name='address' id="address">
                     </div>
                 </div>
         
@@ -155,17 +155,46 @@
         
                 <div class="form-group">
                     <label for="phone">Contact Number</label>
-                    <input type="tel" class="form-control" id="phone" placeholder="Contact Number">
+                    <input type="tel" class="form-control" id="phone" name='contact' placeholder="Contact Number">
                 </div>
                 </div>
                 
                 <!--  col-md-6   -->
             </div>
-            <!--  row   -->
+
+            <div class="row">
+                <!--  col-md-6   -->
+                <div class="col-md-4">
+                    <p>Employment Status</p>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" class="form-check-input" name='employment_status' id='hired' value='Hired'>
+                        <label for="hired" class='form-check-label'>Hired</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" class="form-check-input" name='employment_status' id='volunteer' value='Volunteer'>
+                        <label for="volunteer" class='form-check-label'>Volunteer</label>
+                    </div>
+                </div>
+
+                <div class="col-md-4 pb-3">
+                    <p>Staff status</p>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" class="form-check-input" name='staff_status' id='active' value='Active'>
+                        <label for="active" class='form-check-label'>Active</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" class="form-check-input" name='staff_status' id='inactive' value='Active'>
+                        <label for="inactive" class='form-check-label'>Inactive</label>
+                    </div>
+                </div>
+                
+                <!--  col-md-6   -->
+            </div>
+           
         
         
         
-            <button type="submit" class="btn btn-primary">Add</button>
+            <button type="submit" name='submit' class="btn btn-primary">Add</button>
             </form>
         </div>
     </div>    

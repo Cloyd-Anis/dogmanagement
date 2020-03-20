@@ -1,3 +1,20 @@
+<?php
+    $dbname = 'dogshelter';
+
+    $conn = mysqli_connect('localhost', 'root', '', $dbname);
+
+    if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+
+    $sql = "SELECT * FROM staff";
+    $result = mysqli_query($conn, $sql);
+
+    $sql = "SELECT COUNT(*) as count FROM staff";
+    $count = mysqli_query($conn, $sql);
+    $count = mysqli_fetch_assoc($count);
+
+?>
 <!DOCTYPE html>
 <head>
     <title></title>
@@ -114,7 +131,7 @@
                     <th scope="col"></th>
                     <th scope="col"></th>
                     <th scope="col"></th>
-                    <th scope="col">Number of staffs: 10</th>
+                    <th scope="col">Number of staffs: <?php echo $count['count'] ?></th>
                 </tr>
             </thead>
         </table>
@@ -130,34 +147,36 @@
                     <th scope="col"></th>
                 </tr>
             </thead>
+                <?php if(mysqli_num_rows($result) > 0): ?>
+                    <?php while($row = mysqli_fetch_assoc($result)):?>
+                        <tr>
+                            <th scope="row"><?php echo $row['staffID']; ?></th>
+                            <td><?php echo $row['FName'], " " ,$row['MI'], " " ,$row['LName']; ?></td>
+                            <td><?php echo $row['contact']; ?></td>
+                            <td><?php echo $row['email']; ?></td>
+                            <td>
+                                <form action="staff_profile.php" method='POST'>
+                                    <input type="hidden" name='staff_id' value='<?php echo $row['staffID']; ?>'>
+                                    <button class='btn btn-primary btn-sm' type='submit' name='submit'>Profile</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form action="staff_update.php" method='POST'>
+                                    <input type="hidden" name='staff_id' value='<?php echo $row['staffID']; ?>'>
+                                    <button class='btn btn-primary btn-sm' type='submit' name='submit'>Update</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form action="./handlers/delete_staff.php" method='POST'>
+                                    <input type="hidden" name='staff_id' value='<?php echo $row['staffID']; ?>'>
+                                    <button class='btn btn-primary btn-sm' type='submit' name='submit'>Delete</button>
+                                </form>
+                            </td>
+                        </tr>   
+                    <?php endwhile ?>
+                <?php endif ?>
             <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>John D. Doe</td>
-                    <td>09321456789</td>
-                    <td>johndoe@gmail.com</td>
-                    <td><a href="staff_profile.php">Profile</a></td>
-                    <td><a href="staff_update.php">Update</a></td>
-                    <td><a href="#">Delete</a></td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Robert R. Robertson</td>
-                    <td>09951234789</td>
-                    <td>robertrobertson@gmail.com</td>
-                    <td><a href="staff_profile.php">Profile</a></td>
-                    <td><a href="staff_update.php">Update</a></td>
-                    <td><a href="#">Delete</a></td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Francois A. Bouvier</td>
-                    <td>09451098789</td>
-                    <td>francbouvier@gmail.com</td>
-                    <td><a href="staff_profile.php">Profile</a></td>
-                    <td><a href="staff_update.php">Update</a></td>
-                    <td><a href="#">Delete</a></td>
-                </tr>
+                           
             </tbody>
         </table>
     </div>    

@@ -1,3 +1,18 @@
+<?php
+    $dbname = 'dogshelter';
+
+    $conn = mysqli_connect('localhost', 'root', '', $dbname);
+
+    if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+
+    $sql = "select * from veterinarian ";
+    $result = mysqli_query($conn, $sql);
+
+    $sql = "select * from dog";
+    $dogs = mysqli_query($conn, $sql);
+?>
 <!DOCTYPE html>
 <head>
     <title></title>
@@ -106,28 +121,36 @@
         </div>
                 
         <div class="container mt-3">
-            <form>
+            <form action='./handlers/add_vac.php' method='POST'>
             <h2>NEW VACCINATION</h2>
             <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="first">dogID</label>
-                        <input type="text" class="form-control" placeholder="dogID" id="first">
-                    </div>
+                <div class="col-md-4">    
+                    <label for="selectDog">Dog</label>
+                    <select class="selectpicker form-control" id='selectDog' name='dog'>
+                        <?php if(mysqli_num_rows($dogs) > 0) :?>
+                            <?php while($row = mysqli_fetch_assoc($dogs)) : ?>
+                                <option value="<?php echo $row['dogID'] ;?>"><?php echo $row['dog_name']; ?></option>
+                            <?php endwhile ?>
+                        <?php endif ?>
+                    </select><br>
                 </div>
                 <!--  col-md-6   -->
 
                 <div class="col-md-4">    
-                    <div class="form-group">            
-                        <label for="first">vetID</label>
-                        <input type="text" class="form-control" placeholder="vetID" id="first">
-                    </div>
+                    <label for="selectVet">Veterinarian</label>
+                    <select class="selectpicker form-control" id='selectVet' name='vet'>
+                        <?php if(mysqli_num_rows($result) > 0) :?>
+                            <?php while($row = mysqli_fetch_assoc($result)) : ?>
+                                <option value="<?php echo $row['vetID'] ;?>"><?php echo $row['fname'], " ", $row['mi'], " ", $row['lname'] ; ?></option>
+                            <?php endwhile ?>
+                        <?php endif ?>
+                    </select><br>
                 </div>
         
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="first">Vaccine Name</label>
-                        <input type="text" class="form-control" placeholder="Vaccine Name" id="first">
+                        <input type="text" class="form-control" name='vaccine_name' placeholder="Vaccine Name" id="first">
                     </div>
                 </div>
                 <!--  col-md-6   -->
@@ -139,21 +162,21 @@
                 <div class="col-md-4">        
                     <div class="form-group">
                         <label for="marking">Vaccine Description</label>
-                        <input type="text" class="form-control" id="marking" placeholder="Vaccine Description">
+                        <input type="text" class="form-control" id="marking" name='vaccine_description' placeholder="Vaccine Description">
                     </div>
                 </div>
 
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="height">Dosage</label>
-                        <input type="number" class="form-control" placeholder="Dosage" id="height">
+                        <input type="number" class="form-control" placeholder="Dosage" id="height" name='vaccine_dosage'>
                     </div>
                 </div>
         
                 <div class="col-md-4">        
                     <div class="form-group">
                         <label for="weight">Average Cost</label>
-                        <input type="number" class="form-control" id="weight" placeholder="Average Cost">
+                        <input type="number" class="form-control" id="weight" placeholder="Average Cost" name='vaccine_cost' >
                     </div>
                 </div>
                 
@@ -166,14 +189,14 @@
                 <div class="col-md-4">        
                     <div class="form-group">
                         <label for="length">Date of Vaccination</label>
-                        <input type="date" class="form-control" id="length" placeholder="Date of Vaccination">
+                        <input type="date" class="form-control" id="length" placeholder="Date of Vaccination" name='vaccine_date' >
                     </div>
                 </div>
 
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="length">Next Visit</label>
-                        <input type="date" class="form-control" id="length" placeholder="Date of Next Visit">
+                        <input type="date" class="form-control" id="length" placeholder="Date of Next Visit" name='vaccine_nextVisit' >
                     </div>
                 </div>
                 
@@ -181,7 +204,7 @@
             </div>
         
         
-            <button type="submit" class="btn btn-primary">Add</button>
+            <button type="submit" name='submit' class="btn btn-primary">Add</button>
             </form>
         </div>
                                    

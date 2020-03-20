@@ -1,3 +1,41 @@
+<?php
+    $dbname = 'dogshelter';
+
+    $conn = mysqli_connect('localhost', 'root', '', $dbname);
+
+    if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+
+    if(isset($_POST['submit'])){
+        $vacc_id = $_POST['vacc_id'];
+        
+        //value placeholders
+        $sql = "select * from vaccined_dogs where vacc_id='$vacc_id' ";
+        $result = mysqli_query($conn, $sql);
+        $vacc = mysqli_fetch_assoc($result);
+
+        //for select default value for dog
+        $foo = $vacc;
+        $id = $foo['dogID'];
+        $sql = "select * from vaccined_dogs where dogID='$id' ";
+        $id = mysqli_query($conn, $sql);
+        $id = mysqli_fetch_assoc($id);
+
+        //for vet drop down and select default value     
+        $sql = "select * from veterinarian ";
+        $vets_list = mysqli_query($conn, $sql);
+        //for select default value for vet
+        $vetID = $vacc['vetID'];
+        $sql = "select * from veterinarian where vetID='$vetID' ";
+        $vet = mysqli_query($conn, $sql);
+        $vet = mysqli_fetch_assoc($vet);
+
+        //dog dropdown value
+        $sql = "select * from dog";
+        $dog_list = mysqli_query($conn, $sql);
+    }
+?>
 <!DOCTYPE html>
 <head>
     <title></title>
@@ -106,28 +144,41 @@
         </div>
                 
         <div class="container mt-3">
-            <form>
+            <form action='./handlers/update_vac.php' method='POST'>
+            <input type="hidden" name='vacc_id' value='<?php echo $vacc_id; ?>'>
             <h2>UPDATE VACCINATION RECORD</h2>
             <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="first">dogID</label>
-                        <input type="text" class="form-control" placeholder="dogID" id="first">
-                    </div>
+                <div class="col-md-4">    
+                    <label for="selectDog">Dog</label>
+                    <select class="selectpicker form-control" id='selectDog' name='dog'>
+                        <?php if(mysqli_num_rows($dog_list) > 0) :?>
+                            <?php while($row = mysqli_fetch_assoc($dog_list)) : ?>
+                                <option <?php echo ($row['dogID'] == $id['dogID'])? 'selected="selected"': '' ; ?>value="<?php echo $row['dogID'] ;?>">
+                                    <?php echo $row['dog_name']; ?>
+                                </option>
+                            <?php endwhile ?>
+                        <?php endif ?>
+                    </select><br>
                 </div>
                 <!--  col-md-6   -->
 
                 <div class="col-md-4">    
-                    <div class="form-group">            
-                        <label for="first">vetID</label>
-                        <input type="text" class="form-control" placeholder="vetID" id="first">
-                    </div>
+                    <label for="selectVet">Veterinarian</label>
+                    <select class="selectpicker form-control" id='selectVet' name='vet'>
+                        <?php if(mysqli_num_rows($vets_list) > 0) :?>
+                            <?php while($row = mysqli_fetch_assoc($vets_list)) : ?>
+                                <option <?php echo ($row['vetID'] == $vet['vetID'])? 'selected="selected"': '' ; ?> value="<?php echo $row['vetID'] ;?>">
+                                    <?php echo $row['fname'], " ", $row['mi'], " ", $row['lname'] ; ?>
+                                </option>
+                            <?php endwhile ?>
+                        <?php endif ?>
+                    </select><br>
                 </div>
         
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="first">Vaccine Name</label>
-                        <input type="text" class="form-control" placeholder="Vaccine Name" id="first">
+                        <input type="text" class="form-control" name='vaccName' value='<?php echo $vacc['vaccName'];?>' id="first">
                     </div>
                 </div>
                 <!--  col-md-6   -->
@@ -139,21 +190,21 @@
                 <div class="col-md-4">        
                     <div class="form-group">
                         <label for="marking">Vaccine Description</label>
-                        <input type="text" class="form-control" id="marking" placeholder="Vaccine Description">
+                        <input type="text" class="form-control" id="marking" name='vacc_desc' value='<?php echo $vacc['vacc_desc'];?>' >
                     </div>
                 </div>
 
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="height">Dosage</label>
-                        <input type="number" class="form-control" placeholder="Dosage" id="height">
+                        <input type="number" class="form-control" placeholder="Dosage" name='vacc_dosage' id="height" value='<?php echo $vacc['vacc_dosage'];?>' >
                     </div>
                 </div>
         
                 <div class="col-md-4">        
                     <div class="form-group">
                         <label for="weight">Average Cost</label>
-                        <input type="number" class="form-control" id="weight" placeholder="Average Cost">
+                        <input type="number" class="form-control" id="weight" name='vacc_ave_cost' value='<?php echo $vacc['vacc_ave_cost'];?>' >
                     </div>
                 </div>
                 
@@ -166,14 +217,14 @@
                 <div class="col-md-4">        
                     <div class="form-group">
                         <label for="length">Date of Vaccination</label>
-                        <input type="date" class="form-control" id="length" placeholder="Date of Vaccination">
+                        <input type="date" class="form-control" id="length" name='date_of_vaccination' value='<?php echo $vacc['date_of_vaccination'];?>' >
                     </div>
                 </div>
 
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="length">Next Visit</label>
-                        <input type="date" class="form-control" id="length" placeholder="Date of Next Visit">
+                        <input type="date" class="form-control" id="length" name='next_visit' value='<?php echo $vacc['next_visit'];?>' >
                     </div>
                 </div>
                 
@@ -181,7 +232,7 @@
             </div>
         
         
-            <button type="submit" class="btn btn-primary">Add</button>
+            <button type="submit" name='submit' class="btn btn-primary">Update</button>
             </form>
         </div>
                                    

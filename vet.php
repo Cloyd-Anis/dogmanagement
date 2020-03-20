@@ -1,3 +1,20 @@
+<?php
+    $dbname = 'dogshelter';
+
+    $conn = mysqli_connect('localhost', 'root', '', $dbname);
+
+    if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+
+    $sql = "SELECT * FROM veterinarian";
+    $result = mysqli_query($conn, $sql);
+
+    $sql = "SELECT COUNT(*) as count FROM veterinarian";
+    $count = mysqli_query($conn, $sql);
+    $count = mysqli_fetch_assoc($count);
+
+?>
 <!DOCTYPE html>
 <head>
     <title></title>
@@ -117,68 +134,44 @@
                     <th scope="col">Name</th>
                     <th scope="col">Contact</th>
                     <th scope="col">Email</th>
+                    <th scope="col">Clinic Name</th>
+                    <th scope="col">Clinic Address</th>
                     <th scope="col"></th>
                     <th scope="col"></th>
                     <th scope="col"></th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Austine Demont Demay</td>
-                    <td>09957486789</td>
-                    <td>austinedemay@gmail.com</td>
-                    <td><a href="vet_profile.php">Profile</a></td>
-                    <td><a href="vet_update.php">Update</a></td>
-                    <td><a href="#">Delete</a></td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Hagan Depaul Gagnon</td>
-                    <td>09453634789</td>
-                    <td>hagangagnon@gmail.com</td>
-                    <td><a href="vet_profile.php">Profile</a></td>
-                    <td><a href="vet_update.php">Update</a></td>
-                    <td><a href="#">Delete</a></td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Blanche Jacques Mongeau</td>
-                    <td>09961024781</td>
-                    <td>blanchemongeau@gmail.com</td>
-                    <td><a href="vet_profile.php">Profile</a></td>
-                    <td><a href="vet_update.php">Update</a></td>
-                    <td><a href="#">Delete</a></td>
-                </tr>
-                <!-- <?php if(mysqli_num_rows($result) > 0) : ?>                
+            <tbody>                               
+                <?php if(mysqli_num_rows($result) > 0) : ?>                
                     <?php while($row = mysqli_fetch_assoc($result)) : ?>
                         <tr>
                             <th scope="row"><?php echo $row["vetID"]; ?></th>
                             <td>
                                 <?php 
-                                    echo $row["FName"]." "; 
-                                    echo $row["MI"].". ";
-                                    echo $row["LName"];
+                                    echo $row["fname"]." "; 
+                                    echo $row["mi"].". ";
+                                    echo $row["lname"];
                                 ?>
                             </td>
                             <td><?php echo $row["contact"]; ?></td>
                             <td><?php echo $row["email"]; ?></td>
-                            <td><?php echo $row["clinic"]; ?></td>
+                            <td><?php echo $row["clinic_name"]; ?></td>
+                            <td><?php echo $row["clinic_address"]; ?></td>
                             <td><form action="vet_profile.php" method="POST">
                                 <input type="hidden" name="id" value="<?php echo $row["vetID"]; ?>">                            
-                                <button class ="btn btn-primary" type="submit" name='profile' value="Submit">Profile</button>                     
+                                <button class ="btn btn-primary btn-sm" type="submit" name='profile' value="Submit">Profile</button>                     
                             </form></td>
                             <td><form action ="vet_update.php" method="POST">
-                                <input type="hidden" name="id" value="<?php echo $row["vetID"]; ?>">
-                                <button class ="btn btn-primary" type="submit" name='update' value="Submit">Update</button> 
+                                <input type="hidden" name="vetID" value="<?php echo $row["vetID"]; ?>">
+                                <button class ="btn btn-primary btn-sm" type="submit" name='submit' value="Submit">Update</button> 
                             </form></td>
-                            <td><form method="POST">
-                                <input type="hidden" name="id" value="<?php echo $row["vetID"]; ?>">                            
-                                <button class ="btn btn-primary" type="submit" name='delete' value="Submit">Delete</button>                     
+                            <td><form action='./handlers/delete_vet.php' method="POST">
+                                <input type="hidden" name="vetID" value="<?php echo $row["vetID"]; ?>">                            
+                                <button class ="btn btn-primary btn-sm" type="submit" name='submit' value="Submit">Delete</button>                     
                             </form></td>                    
                         </tr>                
                     <?php endwhile; ?>
-                <?php endif; ?>         -->
+                <?php endif; ?>       
             </tbody>
         </table>
     </div>    

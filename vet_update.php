@@ -1,3 +1,18 @@
+<?php
+    $dbname = 'dogshelter';
+
+    $conn = mysqli_connect('localhost', 'root', '', $dbname);
+
+    if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+
+    
+    $sql = "select * from veterinarian";
+    $result = mysqli_query($conn, $sql);
+    $row = mysqli_fetch_assoc($result);
+
+?>
 <!DOCTYPE html>
 <head>
     <title></title>
@@ -106,14 +121,14 @@
         </div>
 
         <div class="container mt-3">
-        <form action="<?php $_SERVER['PHP_SELF'] ?>" method="POST">
+        <form action="./handlers/update_vet_handler.php" method="POST">
           <h2>UPDATE VET RECORD</h2>
-          <input type='hidden' name='vet_add' id='vet_add' value='1'/>
+          <input type='hidden' name='vetID' id='vet_add' value='<?php echo $row['vetID']; ?>'/>
           <div class="row">
             <div class="col-md-4">
               <div class="form-group">
                 <label for="first">First Name</label>
-                <input type="text" name="FName" class="form-control" placeholder="" id="first" required>
+                <input type="text" name="FName" class="form-control" value='<?php echo $row['fname']; ?>' id="first" required>
               </div>
             </div>
             <!--  col-md-6   -->
@@ -121,14 +136,14 @@
             <div class="col-md-4">
                 <div class="form-group">
                   <label for="middle">Middle Initial</label>
-                  <input type="text" name="MI" class="form-control" placeholder="" id="middle" required>
+                  <input type="text" name="MI" class="form-control" value='<?php echo $row['mi']; ?>'  id="middle" required>
                 </div>
               </div>
       
             <div class="col-md-4">
               <div class="form-group">
                 <label for="last">Last Name</label>
-                <input type="text" name="LName" class="form-control" placeholder="" id="last" required>
+                <input type="text" name="LName" class="form-control" value='<?php echo $row['lname']; ?>'  id="last" required>
               </div>
             </div>
             <!--  col-md-6   -->
@@ -141,14 +156,7 @@
       
                 <div class="form-group">
                   <label for="email">Email address</label>
-                  <input type="email" name="email" class="form-control" id="email" placeholder="E-mail" required>
-                </div>
-              </div>
-
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label for="clinic">Clinic</label>
-                  <input type="text" name="clinic" class="form-control" placeholder="Clinic" id="clinic" required>
+                  <input type="email" name="email" class="form-control" id="email" value='<?php echo $row['email']; ?>'  required>
                 </div>
               </div>
       
@@ -156,15 +164,31 @@
       
               <div class="form-group">
                 <label for="phone">Contact Number</label>
-                <input type="tel" name="contact" class="form-control" id="phone" placeholder="Contact Number" required>
+                <input type="tel" name="contact" class="form-control" id="phone" value='<?php echo $row['contact']; ?>'  required>
               </div>
             </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                  <label for="clinic">Clinic</label>
+                  <input type="text" name="clinic" class="form-control" value='<?php echo $row['clinic_name']; ?>'  id="clinic" required>
+                </div>
+              </div>
             
             <!--  col-md-6   -->
           </div>
+
           <!--  row   -->
+          <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                  <label for="address">Clinic Address</label>
+                  <input type="text" name="address" class="form-control" id="address" value='<?php echo $row['clinic_address']; ?>'  required>
+                </div>
+              </div>
+          </div>
       
-          <button class ="btn btn-primary" type="submit" name='vet_submit' value="Submit">Add</button> 
+          <button class ="btn btn-primary" type="submit" name='submit' value="Submit">Update</button> 
         </form>
       </div>
     </div>    

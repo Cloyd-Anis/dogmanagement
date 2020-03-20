@@ -1,3 +1,21 @@
+<?php
+    $dbname = 'dogshelter';
+
+    $conn = mysqli_connect('localhost', 'root', '', $dbname);
+
+    if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+
+    if(isset($_POST['submit'])){
+        $staff_id = $_POST['staff_id'];
+
+        $sql = "select * from staff where staffID='$staff_id' ";
+        $result = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($result);
+    }
+
+?>
 <!DOCTYPE html>
 <head>
     <title></title>
@@ -106,13 +124,14 @@
         </div>
         
         <div class="container mt-3">
-            <form>
+            <form action='./handlers/update_staff.php' method='POST'>
+            <input type="hidden" name='staff_id' value='<?php echo $staff_id; ?>'>
             <h2>UPDATE STAFF PROFILE</h2>
             <div class="row">
                 <div class="col-md-4">
                 <div class="form-group">
                     <label for="first">First Name</label>
-                    <input type="text" class="form-control" placeholder="" id="first">
+                    <input type="text" class="form-control" name='firstname' value="<?php echo $row['FName']; ?>" id="first">
                 </div>
                 </div>
                 <!--  col-md-6   -->
@@ -120,14 +139,14 @@
                 <div class="col-md-4">
                     <div class="form-group">
                     <label for="middle">Middle Name</label>
-                    <input type="text" class="form-control" placeholder="" id="middle">
+                    <input type="text" class="form-control" name='middleinitial' value="<?php echo $row['MI']; ?>" id="middle">
                     </div>
                 </div>
         
                 <div class="col-md-4">
                 <div class="form-group">
                     <label for="last">Last Name</label>
-                    <input type="text" class="form-control" placeholder="" id="last">
+                    <input type="text" class="form-control" name='lastname' value="<?php echo $row['LName']; ?>" id="last">
                 </div>
                 </div>
                 <!--  col-md-6   -->
@@ -140,14 +159,14 @@
         
                     <div class="form-group">
                     <label for="email">Email address</label>
-                    <input type="email" class="form-control" id="email" placeholder="E-mail">
+                    <input type="email" class="form-control" name='email' id="email" value="<?php echo $row['email']; ?>">
                     </div>
                 </div>
 
                 <div class="col-md-4">
                     <div class="form-group">
                     <label for="address">Address</label>
-                    <input type="text" class="form-control" placeholder="Address" id="address">
+                    <input type="text" class="form-control" name='address' value="<?php echo $row['address']; ?>" id="address">
                     </div>
                 </div>
         
@@ -155,17 +174,45 @@
         
                 <div class="form-group">
                     <label for="phone">Contact Number</label>
-                    <input type="tel" class="form-control" id="phone" placeholder="Contact Number">
+                    <input type="tel" class="form-control" name='contact' id="phone" value="<?php echo $row['contact']; ?>">
                 </div>
                 </div>
                 
                 <!--  col-md-6   -->
             </div>
             <!--  row   -->
+            <div class="row">
+                <!--  col-md-6   -->
+                <div class="col-md-4">
+                    <p>Employment Status</p>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" class="form-check-input" name='employment_status' id='hired' value='Hired' <?php echo ($row['employment_status'] == 'Hired')? 'checked': '';?> >
+                        <label for="hired" class='form-check-label'>Hired</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" class="form-check-input" name='employment_status' id='volunteer' value='Volunteer' <?php echo ($row['employment_status'] == 'Volunteer')? 'checked': '';?>>
+                        <label for="volunteer" class='form-check-label'>Volunteer</label>
+                    </div>
+                </div>
+
+                <div class="col-md-4 pb-3">
+                    <p>Staff status</p>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" class="form-check-input" name='staff_status' id='active' value='Active' <?php echo ($row['staff_status'] == 'Active')? 'checked': '';?>>
+                        <label for="active" class='form-check-label'>Active</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" class="form-check-input" name='staff_status' id='inactive' value='Active' <?php echo ($row['staff_status'] == 'Inactive')? 'checked': '';?>>
+                        <label for="inactive" class='form-check-label'>Inactive</label>
+                    </div>
+                </div>
+                
+                <!--  col-md-6   -->
+            </div>
         
         
         
-            <button type="submit" class="btn btn-primary">Add</button>
+            <button type="submit" name='submit' class="btn btn-primary">Update</button>
             </form>
         </div>
     </div>    

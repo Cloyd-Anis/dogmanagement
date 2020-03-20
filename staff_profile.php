@@ -1,3 +1,20 @@
+<?php
+    $dbname = 'dogshelter';
+
+    $conn = mysqli_connect('localhost', 'root', '', $dbname);
+
+    if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+
+    if(isset($_POST['submit'])){
+        $staff_id = $_POST['staff_id'];
+
+        $sql = "select * from staff where staffID='$staff_id' ";
+        $result = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($result);
+    }
+?>
 <!DOCTYPE html>
 <head>
     <title></title>
@@ -107,11 +124,11 @@
         </div>
         <div class="card">        
             <img src="./includes/assets/imgs/johndoe.jpg" alt="John" style="width:100%">
-            <h2>ID: 1 | John D. Doe</h2>
-            <p class="title">091243684002</p>
-            <p class="title">johndoe@gmail.com</p>
-            <p>7685 St. Paul Road San Antonio Village Makati Metro Manila</p> 
-            <p>Employment date: 2018/02/01</p>     
+            <h2>ID: <?php echo $row['staffID'];?> | <?php echo $row['FName'], " " ,$row['MI'], " " ,$row['LName']; ?></h2>
+            <p class="title"><?php echo $row['contact'];?></p>
+            <p class="title"><?php echo $row['email'];?></p>
+            <p><?php echo $row['address'];?></p> 
+            <p><?php echo $row['employ_date'];?></p>     
         </div>
 
         <!-- <div class="card">

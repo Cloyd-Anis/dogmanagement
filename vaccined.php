@@ -1,3 +1,20 @@
+<?php
+    $dbname = 'dogshelter';
+
+    $conn = mysqli_connect('localhost', 'root', '', $dbname);
+
+    if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+
+    $sql = "select * from vaccined_dogs ";
+    $result = mysqli_query($conn, $sql);
+
+    $sql = "select count(*) as count from vaccined_dogs";
+    $count = mysqli_query($conn, $sql);
+    $count = mysqli_fetch_assoc($count);
+
+?>
 <!DOCTYPE html>
 <head>
     <title></title>
@@ -108,6 +125,7 @@
         <table class="table table-hover">
             <thead>
                 <th scope="col"><a href="vacc_add.php">NEW VACCINATION</a></th>
+                <th scope="col">Number of vaccinated dogs: <?php echo $count['count'];?></th>
             </thead>
         </table>
         <table class="table table-hover">
@@ -115,49 +133,74 @@
             <tr>
                 <th scope="col">Dog ID</th>
                 <th scope="col">Dog Name</th>
-                <th scope="col">Vet ID</th>
-                <th scope="col">Vet Name</th>        
+                <th scope="col">Vet Name</th>
+                <th scope="col">Vaccine</th>      
                 <th scope="col">Date of Vaccination</th>
-                <th scope="col">Next Visit</th>
+                <th scope="col">Next Visit</th>                
                 <th scope="col"></th>
                 <th scope="col"></th>
                 <th scope="col"></th>
+                
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <th scope="row"><a href="dog_profile.php">1</a></th>
-                <td><a href="dog_profile.php">Mark</a></td>
-                <td><a href="vet_profile.php">2</a></td>
-                <td><a href="vet_profile.php">Rayl X. Xylem</a></td>
-                <td>2020-2-10</td>
-                <td>2020-4-11</td>
-                <td><a href="vacc_details.php">Vaccine Details</a></td>
-                <td><a href="vacc_update.php">Update</a></td>
-                <td><a href="#">Delete</a></td>
-            </tr>
-            <tr>
-            <th scope="row"><a href="dog_profile.php">3</a></th>
-                <td><a href="dog_profile.php">Mingming</a></td>
-                <td><a href="vet_profile.php">4</a></td>
-                <td><a href="vet_profile.php">Heinz G. Doofenshmirtz</a></td>
-                <td>2020-2-7</td>
-                <td>2020-4-6</td>
-                <td><a href="vacc_details.php">Vaccine Details</a></td>
-                <td><a href="vacc_update.php">Update</a></td>
-                <td><a href="#">Delete</a></td>
-            </tr>
-            <tr>
-            <th scope="row"><a href="dog_profile.php">5</a></th>
-                <td><a href="dog_profile.php">Hazuki</a></td>
-                <td><a href="vet_profile.php">3</a></td>
-                <td><a href="vet_profile.php">Stephen N. Strange</a></td>
-                <td>2020-2-26</td>
-                <td>2020-3-20</td>
-                <td><a href="vacc_details.php">Vaccine Details</a></td>
-                <td><a href="vacc_update.php">Update</a></td>
-                <td><a href="#">Delete</a></td>
-            </tr>
+                <?php if(mysqli_num_rows($result) > 0) : ?>
+                    <?php while($row = mysqli_fetch_assoc($result)) : ?>
+                        <tr>
+                            <th scope="row">
+                                <form action="dog.profile.php" method='POST'>
+                                    <input type="hidden" value='<?php echo $row['dogID'];?>' name='dog_id'>
+                                    <button class='btn btn-primary btn-sm' type='submit' name='submit'><?php echo $row['dogID']; ?></button>
+                                </form>
+                            </th>
+                            <td>
+                                <?php 
+                                    $dogID = $row['dogID'];
+                                    $sql = "select dog_name as name from dog where dogID='$dogID' "; 
+                                    $dog_name = mysqli_query($conn, $sql);
+                                    $dog_name = mysqli_fetch_assoc($dog_name);                             
+                                ?>
+                                <form action="dog.profile.php" method='POST'>
+                                    <input type="hidden" value='<?php echo $row['dogID'];?>' name='dog_id'>
+                                    <button class='btn btn-primary btn-sm' type='submit' name='submit'><?php echo $dog_name['name']; ?></button>
+                                </form>
+                            </td>
+                            <td>
+                                <?php 
+                                    $vetID= $row['vetID'];
+                                    $sql = "select fname as name from veterinarian where vetID='$vetID' "; 
+                                    $name = mysqli_query($conn, $sql);
+                                    $name = mysqli_fetch_assoc($name);                             
+                                ?>
+                                <form action="dog.profile.php" method='POST'>
+                                    <input type="hidden" value='<?php echo $row['vetID'];?>' name='vet_id'>
+                                    <button class='btn btn-primary btn-sm' type='submit' name='submit'><?php echo $name['name']; ?></button>
+                                </form>
+                            </td>
+                            <td><?php echo $row['vaccName'] ; ?></td>
+                            <td><?php echo $row['date_of_vaccination'] ; ?></td>
+                            <td><?php echo $row['next_visit'] ; ?></td>
+                            <td>
+                                <form action="#" method='POST'>
+                                    <input type="hidden" value='<?php echo $row['vetID'];?>' name='vet_id'>
+                                    <button class='btn btn-primary btn-sm' type='submit' name='submit'>Vaccine Details</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form action="./vacc_update.php" method='POST'>
+                                    <input type="hidden" value='<?php echo $row['vacc_id'];?>' name='vacc_id'>
+                                    <button class='btn btn-primary btn-sm' type='submit' name='submit'>Update</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form action="./handlers/delete_vac.php" method='POST'>
+                                    <input type="hidden" value='<?php echo $row['vacc_id'];?>' name='vacc_id'>
+                                    <button class='btn btn-primary btn-sm' type='submit' name='submit'>Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endwhile ?>
+                <?php endif ?>
             </tbody>
         </table>                              
     </div>    

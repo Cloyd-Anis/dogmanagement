@@ -106,7 +106,7 @@
         </div>
 
         <div class="container mt-3">
-        <form action="<?php $_SERVER['PHP_SELF'] ?>" method="POST">
+        <form action="./handlers/add_vet_handler.php" method="POST">
           <h2>ADD VET</h2>
           <input type='hidden' name='vet_add' id='vet_add' value='1'/>
           <div class="row">
@@ -144,13 +144,6 @@
                   <input type="email" name="email" class="form-control" id="email" placeholder="E-mail" required>
                 </div>
               </div>
-
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label for="clinic">Clinic</label>
-                  <input type="text" name="clinic" class="form-control" placeholder="Clinic" id="clinic" required>
-                </div>
-              </div>
       
             <div class="col-md-4">
       
@@ -159,12 +152,28 @@
                 <input type="tel" name="contact" class="form-control" id="phone" placeholder="Contact Number" required>
               </div>
             </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                  <label for="clinic">Clinic</label>
+                  <input type="text" name="clinic" class="form-control" placeholder="Clinic" id="clinic" required>
+                </div>
+              </div>
             
             <!--  col-md-6   -->
           </div>
+
           <!--  row   -->
+          <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                  <label for="address">Clinic Address</label>
+                  <input type="text" name="address" class="form-control" id="address" placeholder="Address" required>
+                </div>
+              </div>
+          </div>
       
-          <button class ="btn btn-primary" type="submit" name='vet_submit' value="Submit">Add</button> 
+          <button class ="btn btn-primary" type="submit" name='submit' value="Submit">Add</button> 
         </form>
       </div>
     </div>    
