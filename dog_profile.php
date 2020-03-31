@@ -1,3 +1,11 @@
+<?php
+$conn = mysqli_connect("localhost","root","","dogshelter");
+if(!$conn){
+    die('Could not connect:' . mysql_error());
+}
+?>
+
+
 <!DOCTYPE html>
 <head>
     <title></title>
@@ -110,38 +118,38 @@
             <div class="card">            
                 <table class="table">
                 <tbody>
-                    <td>
-                    <img src="./includes/assets/imgs/1.jpg" alt="John">
-                    <h2>ID: 1 | Mark</h2>
-                    <p>Shiba Inu</p>
-                    </td>
-                    <td>
-                    <table class="table">
-                        <tbody>
-                        <tr>
-                            <td>Age group: 5-7 yrs old</td>
-                            <td>Birthdate: 2014/01/24</td>                  
-                        </tr>
-                        <tr>
-                            <td>Sex: Male</td>
-                            <td>Color: Red</td>                  
-                        </tr>
-                        <tr>
-                            <td>Marking: None</td>
-                            <td>Weight: 8.6 kg</td>                  
-                        </tr>
-                        <tr>
-                            <td>Height: 37 cm</td>
-                            <td>Length: 76 cm</td>                  
-                        </tr>
-                        <tr>
-                            <td>Assigned staff: 1</td>
-                            <td>Status: Active</td>                  
-                        </tr>
-                        <tr>
-                            <td>Created at: 2018/04/19</td>
-                            <td>Updated at: 2020/01/04</td>                  
-                        </tr>
+                    <?php
+                    $id = $_GET['id'];
+                    $result = mysqli_query($conn,"SELECT * FROM `dog` WHERE `dogID` = $id");
+                    while($row = mysqli_fetch_array($result)){?>
+                        <td>
+                        <img src="includes/img/<?php echo $row['image'];?>">
+                        <h2>ID: <?php echo $row['dogID'];?> | <?php echo $row['dog_name'];?> </h2>
+                        <p><?php $row['breed'];?></p>
+                        </td>
+                        <td>
+                        <table class="table">
+                            <tbody>
+                            <tr>
+                                <td>Age group:<?php echo $row['age_group'];?></td>         
+                            </tr>
+                            <tr>
+                                <td>Sex:<?php echo $row['sex'];?></td>
+                                <td>Color:<?php echo $row['color'];?></td>                  
+                            </tr>
+                            <tr>
+                                <td>Marking: <?php echo $row['marking'];?></td>
+                                <td>Weight: <?php echo $row['weight'];?>kg</td>                  
+                            </tr>
+                            <tr>
+                                <td>Height: <?php  echo $row['height'];?>cm</td>
+                                <td>Length: <?php echo $row['length'];?>cm</td>                  
+                            </tr>
+                            <tr>
+                                <td>Created at: <?php echo $row['created_at'];?></td>
+                                <td>Status: <?php echo $row['status'];?></td>                 
+                            </tr>
+                    <?php }mysqli_close($conn);?>
                         </tbody>
                     </table> 
                     </td>
