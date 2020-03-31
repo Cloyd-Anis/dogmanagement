@@ -1,3 +1,11 @@
+<?php
+$conn = mysqli_connect("localhost","root","","dogshelter");
+if(!$conn){
+    die('Could not connect:' . mysql_error());
+}
+?>
+
+
 <!DOCTYPE html>
 <head>
     <title></title>
@@ -115,7 +123,12 @@
                 <th scope="col"></th>
                 <th scope="col"></th>
                 <th scope="col"></th>
-                <th scope="col">Number of dogs: 50</th>
+                <?php
+                   if($query = mysqli_query($conn,"SELECT * FROM `dog`")){
+                      $count = mysqli_num_rows($query);
+                   }
+                ?>
+                <th scope="col">Number of dogs: <?php echo $count;?></th>
             </tr>
             </thead>
         </table>
@@ -133,36 +146,34 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Shiba Inu</td>
-                <td>Male</td>
-                <td>Active</td>
-                <td><a href="dog_profile.php">Profile</a></td>
-                <td><a href="dog_update.php">Update</a></td>
-                <td><a href="#">Delete</a></td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>Larry</td>
-                <td>Shiba Inu</td>
-                <td>Male</td>
-                <td>Active</td>
-                <td><a href="dog_profile.php">Profile</a></td>
-                <td><a href="dog_update.php">Update</a></td>
-                <td><a href="#">Delete</a></td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td>Inu</td>
-                <td>Shiba Inu</td>
-                <td>Male</td>
-                <td>Active</td>
-                <td><a href="dog_profile.php">Profile</a></td>
-                <td><a href="dog_update.php">Update</a></td>
-                <td><a href="#">Delete</a></td>
-            </tr>
+                <?php
+                $result = mysqli_query($conn,"SELECT `dogID`,`dog_name`,`breed`,`sex`,`status` FROM `dog`");
+                while($row = mysqli_fetch_array($result)){?>
+                    <td><?php echo $row['dogID'];?></td>
+                    <td><?php echo $row['dog_name'];?></td>
+                    <td><?php echo $row['breed'];?></td>
+                    <td><?php echo $row['sex'];?></td>
+                    <td><?php echo $row['status'];?></td>
+                    <td>
+                        <form action ="dog_profile.php" method = "POST">
+                            <input type= "hidden" name = "dogID" value = "<?php echo $row['dogID'];?>">
+                            <button class="btn btn-primary btn-sm" type="submit" name="submit">Profile</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form action ="dog_update.php" method = "POST">
+                            <input type= "hidden" name = "dogID" value = "<?php echo $row['dogID'];?>">
+                            <button class="btn btn-primary btn-sm" type="submit" name="update">Update</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form action ="./handlers/dog_delete.php" method = "POST">
+                            <input type= "hidden" name = "dogID" value = "<?php echo $row['dogID'];?>">
+                            <button class="btn btn-primary btn-sm" type="submit" name="submit">Profile</button>
+                        </form>
+                    </td>
+                </tr>
+                <?php } mysqli_close($conn);?>
             </tbody>
         </table>                              
     </div>    
