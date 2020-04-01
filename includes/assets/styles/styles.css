@@ -1,0 +1,62 @@
+body {
+    overflow-x: hidden;
+}
+
+.nav {
+    height: 100%;
+    width: 85px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;    
+    transition: 0.7s;
+}
+
+.nav a {
+    display: block;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    font-size: 25px;
+    text-decoration: none;
+    color: #ccc;
+}
+
+.nav a:hover {
+    color: #ccffff;
+    transition: .4s;
+}
+
+.nav .close {
+    position: absolute;
+    top: 0;
+    right: 22px;
+    margin-left: 50px;
+    font-size: 30px;    
+}
+
+.nav li {
+    list-style-type: none;
+}
+
+.nav .menu_item {
+    padding-left: 10px;
+}
+
+.slide {
+    font-size: 26px;
+    color: #111111;
+}
+
+#content {
+    padding: 20px;
+    padding-right: 105px;
+    margin-left: 85px;
+    transition: margin-left 0.7s;
+    width: 100%;
+}
+
+.active_span {
+    color: #ccffff;
+}
