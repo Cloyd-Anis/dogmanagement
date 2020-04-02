@@ -1,3 +1,13 @@
+<?php
+$servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "dogshelter";
+    $conn = mysqli_connect($servername, $username, $password, $dbname);
+    $query= "SELECT * FROM prescription";
+    $result=mysqli_query($conn,$query);
+    
+?>
 <!DOCTYPE html>
 <head>
     <title></title>
@@ -27,7 +37,7 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th scope="col"><a href="#">Add Prescription</a></th>
+                <th scope="col"><a href="presc_add.php">Add Prescription</a></th>
                 <th scope="col"></th>
                 <th scope="col"></th>
                 <th scope="col"></th>
@@ -38,41 +48,39 @@
                 <th scope="col">Prescription ID</th>
                 <th scope="col">Generic Name</th>
                 <th scope="col">Brand Name</th>        
-                <th scope="col">Dosage</th>
                 <th scope="col">Description</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>Rabies Vaccine</td>
-                <td>Imovax</td>
-                <td>1mL</td>
-                <td>Rabies vaccine is an immunization used to prevent rabies in people who have been bitten by an animal or otherwise exposed to the rabies virus.</td>
-                <td><a href="#">Info</a></td>
-                <td><a href="#">Update</a></td>
-                <td><a href="#">Delete</a></td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>HEARTGARD Plus</td>
-                <td>Ivermectin/Pyrantel</td>
-                <td>1 chewable</td>
-                <td>For use in dogs to prevent canine heartworm disease by eliminating the tissue stage of heartworm larvae (Dirofilaria immitis) for a month (30 days) after infection and for the treatment and control of ascarids (Toxocara canis, Toxascaris leonina) and hookworms (Ancylostoma caninum, Uncinaria stenocephala, Ancylostoma braziliense).</td>
-                <td><a href="#">Info</a></td>
-                <td><a href="#">Update</a></td>
-                <td><a href="#">Delete</a></td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td>NexGard</td>
-                <td>Afoxolaner</td>
-                <td>1 chewable</td>
-                <td>NexGard® (afoxolaner) is available in four sizes of beef-flavored, soft chewables for oral administration to dogs and puppies according to their weight. Each chewable is formulated to provide a minimum afoxolaner dosage of 1.14 mg/lb (2.5 mg/kg). Afoxolaner has the chemical composition 1-Naphthalenecarboxamide, 4-[5-[3-chloro-5-(trifluoromethyl)-phenyl]-4, 5-dihydro-5-(trifluoromethyl)-3-isoxazolyl]-N-[2-oxo-2-[(2,2,2-trifluoroethyl)amino]ethyl.</td>
-                <td><a href="#">Info</a></td>
-                <td><a href="#">Update</a></td>
-                <td><a href="#">Delete</a></td>
-            </tr>
+
+                <?php if($result){
+                    while($row=mysqli_fetch_assoc($result)){
+                        printf("<tr>");
+                            printf("<th scope='row'>%d</th>",$row["prescID"]);
+                            printf("<td>%s</td>",$row["generic_name"]);
+                            printf("<td>%s</td>",$row["brand_name"]);
+                            printf("<td>%s</td>",$row["presc_desc"]);
+
+                        printf("<td>");
+                            print("<form action='prescriptionUpdate.php' method='POST'>");
+                                printf("<input type='hidden' name='ref' value='%d'>",$row["prescID"]);
+                                print("<button type='submit' name='update'>Update</button>");
+                            printf("</form>");
+                        printf("</td>");
+                        
+                        printf("<td>");
+                            printf("<form action='includes/handlers/dogPrescriptionHandler.php' method='POST'>");
+                                printf("<input type='hidden' name='ref' value='%d'>",$row["prescID"]);
+                                print("<button type='submit' name='delete'>Remove</button>");
+                            printf("</form>");
+                        printf("<td>");
+
+
+                        printf("</tr>");
+                    }
+                }?>
+
+        
         </tbody>
     </table>
 
