@@ -1,95 +1,112 @@
-CREATE DATABASE dogshelter;
-USE dogshelter;
+create database dogshelter;
+use dogshelter;
 
-CREATE TABLE STAFF(
-	staffID int AUTO_INCREMENT,
-	FName varchar(30) NOT NULL,
-	LName varchar(64) NOT NULL,
-	MI char NOT NULL,
-	contact varchar(11) NOT NULL,
-	email varchar(64) NOT NULL,
-	address varchar(300) NOT NULL,
-	employ_date date,
-	
-	CONSTRAINT STAFF_pk PRIMARY KEY(staffID)
+create table dogs(
+    dog_id int auto_increment,
+    name varchar(30) not null,
+    breed varchar(30),
+    color enum('Brown','Red','Black','White','Gold','Yellow','Cream','Blue','Grey') NOT NULL,
+    marking ENUM('Color and Tan','BiColor','TriColor','Merle','Tuxedo','Harlequin','Spotted','Flecked/Ticked/Speckled','Brindle','Saddle/Blanket','Sable')NOT NULL,
+    sex ENUM('Male','Female') NOT NULL,
+    weight decimal(5,2) NOT NULL,
+    height decimal(5,2) NOT NULL,
+    length decimal(5,2) NOT NULL,
+    age_group ENUM('Less than 6 months','6-18 months','1-3 years','6-10+ years')NOT NULL,
+    image blob not null,
+    status ENUM('Active','Inactive', 'Adopted')DEFAULT 'Active' NOT NULL,
+    created_at date NOT NULL,
+    constraint pk_dogs primary key(dog_id)
 );
 
-CREATE TABLE DOG(
-	dogID int AUTO_INCREMENT,
-	age_group ENUM('Less than 6 months','6-18 months','1-3 years','6-10+ years')NOT NULL,
-	name text(30) NOT NULL,
-	breed varchar(30) NOT NULL,
-	color ENUM('Brown','Red','Black','White','Gold','Yellow','Cream','Blue','Grey') NOT NULL,
-	marking ENUM('Color and Tan','BiColor','TriColor','Merle','Tuxedo','Harlequin','Spotted','Flecked/Ticked/Speckled','Brindle','Saddle/Blanket','Sable')NOT NULL,
-	birth_date date,
-	sex ENUM('Male','Female') NOT NULL,
-	size_group ENUM('Toy','Small','Medium','Large','Extra Large') NOT NULL,
-	weight decimal(3,2) NOT NULL,
-	height decimal(3,2) NOT NULL,
-	length decimal(2,1) NOT NULL,
-	status ENUM('Active','Deceased')DEFAULT 'Active' NOT NULL,
-	created_at date NOT NULL,
-	updated_at date NOT NULL,
-	staffID int,
-	
-	CONSTRAINT DOG_pk PRIMARY KEY(dogID),
-	CONSTRAINT DOG_fk FOREIGN KEY (staffID) REFERENCES STAFF(staffID)
+create table veterinarians(
+    vet_id int auto_increment,
+    fname varchar(32) NOT NULL,
+    mi char NOT NULL,
+    lname varchar(32) NOT NULL,
+    contact int(11) NOT NULL,
+    email varchar(64) NOT NULL,
+    clinic_name varchar(64) NOT NULL,
+    clinic_address varchar(64) NOT NULL,
+    constraint pk_veterinarian primary key (vet_id)
 );
 
-CREATE TABLE VETERINARIAN(
-	vetID int AUTO_INCREMENT,
-	FName varchar(32) NOT NULL,
-	LName varchar(32) NOT NULL,
-	MI char,
-	contact varchar(11) NOT NULL,
-	email varchar(64) NOT NULL,
-	clinic varchar(255) NOT NULL,
-	
-	CONSTRAINT VETERINARIAN_pk PRIMARY KEY(vetID)
+create table consults(
+    consult_id int AUTO_INCREMENT,
+    dog_id int,
+    vet_id int,
+    dog_condition text NOT NULL,
+    total_cost decimal(6,2) NOT NULL,
+    consult_date date NOT NULL,
+    next_visit date,
+
+    constraint pk_consults primary key(consult_id),
+    constraint fk1_consults foreign key(dog_id) references dogs(dog_id),
+    constraint fk2_consults foreign key(vet_id) references veterinarians(vet_id)
 );
 
-CREATE TABLE CONSULT(
-	consultID int AUTO_INCREMENT,
-	dogID int,
-	vetID int,
-	consult_date date,
-	dog_condition text NOT NULL,
-	total_cost decimal(6,2) NOT NULL,
-	payment_status ENUM('Paid','Pending')Default 'Pending' NOT NULL,
-	
-	CONSTRAINT CONSULT_pk PRIMARY KEY(consultID),
-	CONSTRAINT CONSULT_fk1 FOREIGN KEY(dogID) REFERENCES DOG (dogID),
-	CONSTRAINT CONSULT_fk2 FOREIGN KEY(vetID) REFERENCES VETERINARIAN(vetID)
+create table prescriptions(
+    presc_id int auto_increment,
+    dog_id int,
+    consult_id int,
+    presc_desc longtext NOT NULL,
+    status enum("Active", "Inactive") default "Active",
+    constraint pk_prescription primary key(presc_id),
+    constraint fk1_prescription foreign key(dog_id) references dogs(dog_id),
+    constraint fk2_prescription foreign key(consult_id) references consults(consult_id)
 );
 
-CREATE TABLE VACCINATION(
-	vacc_id int AUTO_INCREMENT,
-	vacc_ave_cost decimal(5,2) NOT NULL,
-	vaccName varchar(128) NOT NULL,
-	vacc_desc varchar(128) NOT NULL,
-	vacc_dosage decimal(5,2) NOT NULL,
-	next_visit date,
-	
-	CONSTRAINT VACCINATION_pk PRIMARY KEY(vacc_id)
+create table dog_procedures(
+    proc_id int auto_increment,
+    consult_id int,
+    dog_id int,
+    proc_ave_cost int NOT NULL,
+    proc_names varchar(64) NOT NULL,
+    proc_desc text NOT NULL,
+    constraint pk_dog_procedures primary key(proc_id),
+    constraint fk1_dog_procedures foreign key(consult_id) references consults(consult_id),
+    constraint fk2_dog_procedures foreign key(dog_id) references dogs(dog_id)
 );
 
-CREATE TABLE PRESCRIPTION(
-	prescID int AUTO_INCREMENT,
-	generic_name varchar(64) NOT NULL,
-	brand_name varchar(64) NOT NULL,
-	dosage decimal(3,2)NOT NULL,
-	dosage_qty int NOT NULL,
-	dosage_freq enum('per day','per week','per month'),
-	presc_desc varchar(128) NOT NULL,
-	
-	CONSTRAINT PRESCRIPTION_pk PRIMARY KEY(prescID)
+create table dog_parents(
+    dogParents_id int auto_increment,
+    dog_id int,
+    parent_firstname varchar(30) NOT NULL,
+    parent_mi char NOT NULL,
+    parent_lastname varchar(30) NOT NULL,
+    parent_address varchar(255) NOT NULL,
+    parent_email varchar(50) NOT NULL,
+    parent_contact long NOT NULL,
+    constraint pk_dogParents primary key (dogParents_id),
+    constraint fk_dogParents foreign key (dog_id) references dogs(dog_id)
 );
 
-CREATE TABLE DOG_PROCEDURE(
-	procID int AUTO_INCREMENT,
-	proc_ave_cost int NOT NULL,
-	procName varchar(64) NOT NULL,
-	proc_desc int NOT NULL,
-	
-	CONSTRAINT DOG_PROCEDURE_pk PRIMARY KEY(procID)
+
+create table staff(
+    staff_id int auto_increment,
+    fname varchar(30) NOT NULL,
+    lname varchar(64) NOT NULL,
+    mi char NOT NULL,
+    contact long NOT NULL,
+    email varchar(64) NOT NULL,
+    address text NOT NULL,
+    employment_status enum('Hired', 'Volunteer'),
+    staff_status enum('Active', 'Inactive'),
+    employ_date date,
+    CONSTRAINT STAFF_pk PRIMARY KEY(staff_id)
+);
+
+
+create table vaccined_dogs(
+    vacc_id int AUTO_INCREMENT,
+    dog_id int NOT NULL,
+    vet_id int NOT NULL,
+    vacc_name varchar(128) NOT NULL,
+    vacc_desc varchar(128) NOT NULL,
+    vacc_ave_cost decimal(5,2) NOT NULL,
+    date_of_vaccination date NOT NULL,
+    next_visit date,
+    constraint pk_vaccined_dogs primary key(vacc_id),
+    constraint fk1_vaccined_dogs foreign key(dog_id) references dogs(dog_id),
+    constraint fk2_vaccined_dogs foreign key(vet_id) references veterinarians(vet_id)
+    
 );
